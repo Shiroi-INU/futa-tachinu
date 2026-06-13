@@ -342,3 +342,164 @@ h2 {
     font-size: clamp(40px, 13vw, 58px);
   }
 }
+
+/* 追加演出：くだらないが、最後だけ少し熱い */
+.item-screen .item-icon {
+  animation: item-pop .72s steps(2, end) infinite;
+}
+
+.clear-screen h2 {
+  font-size: clamp(42px, 14vw, 68px);
+  color: var(--gold);
+}
+
+.clear-screen .pixel-canvas {
+  animation: clear-shake .48s steps(2, end) 3;
+}
+
+@keyframes item-pop {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-6px) rotate(2deg); }
+}
+
+@keyframes clear-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* 2026-06-14 UI調整 */
+h1 {
+  white-space: nowrap;
+  font-size: clamp(38px, 12vw, 58px);
+  letter-spacing: -0.1em;
+  padding-right: .1em;
+}
+
+.start-note,
+.game-note {
+  width: min(100%, 330px);
+  padding: 8px 10px;
+  border: 3px solid var(--ink);
+  background: var(--gold);
+  color: var(--ink);
+  box-shadow: 0 4px 0 var(--ink);
+  opacity: 1;
+  line-height: 1.35;
+}
+
+.game-screen.screen.is-active {
+  gap: 10px;
+}
+
+.stage-canvas {
+  width: min(76vw, 290px);
+  margin-top: 0;
+}
+
+.game-note {
+  margin-top: -2px;
+}
+
+.live-panel {
+  width: min(100%, 360px);
+  display: grid;
+  gap: 8px;
+}
+
+.game-header {
+  width: 100%;
+  gap: 8px;
+}
+
+.game-header > div {
+  padding: 8px 10px;
+}
+
+.game-header strong {
+  font-size: 26px;
+}
+
+.progress-wrap {
+  width: 100%;
+  height: 20px;
+}
+
+.meter {
+  padding: 10px;
+}
+
+.meter-track {
+  height: 54px;
+}
+
+.meter-caption {
+  display: none;
+}
+
+.tap-button {
+  margin-top: 2px;
+}
+
+.primary-button.is-disabled,
+.primary-button:disabled {
+  opacity: .48;
+  filter: grayscale(.35);
+  transform: none !important;
+  box-shadow: 0 7px 0 var(--ink) !important;
+}
+
+.link-buttons {
+  width: min(100%, 330px);
+  display: grid;
+  gap: 10px;
+}
+
+.link-button {
+  display: grid;
+  place-items: center;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 4px solid var(--ink);
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: 0 6px 0 var(--ink);
+  font-size: 13px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.link-button:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 var(--ink);
+}
+
+@media (max-width: 360px) {
+  h1 {
+    font-size: 34px;
+  }
+
+  .lead,
+  .result-copy {
+    font-size: 13px;
+  }
+}
+
+@media (max-height: 700px) {
+  .stage-canvas {
+    width: min(62vw, 230px);
+  }
+
+  .game-screen.screen.is-active {
+    gap: 8px;
+  }
+
+  .tap-button {
+    min-height: 58px;
+  }
+
+  .judge-text {
+    font-size: 20px;
+    min-height: 24px;
+  }
+}

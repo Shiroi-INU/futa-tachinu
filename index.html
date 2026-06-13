@@ -10,9 +10,9 @@
 <body>
   <main id="app" class="app" aria-live="polite">
     <section id="titleScreen" class="screen is-active title-screen">
-      <div class="badge">15秒ミニゲーム</div>
-      <h1>風太、<br><span>立ちぬ</span></h1>
-      <p class="lead">もう人間でいう100歳。<br>それでも、風太はもう一度だけ立ち上がりたい。</p>
+      <div class="badge">10秒ミニゲーム</div>
+      <h1>風太、立ちぬ</h1>
+      <p class="lead">レッサーパンダの風太は、もう人間でいう100歳。<br>だが、みんなのために立ち上がりたいんだ。</p>
       <canvas id="titleCanvas" class="pixel-canvas" width="160" height="120" aria-label="ドット絵のレッサーパンダ"></canvas>
 
       <div class="status-card">
@@ -20,28 +20,15 @@
         <p id="itemLabel">持ち物：なし</p>
       </div>
 
-      <button id="startButton" class="primary-button">立ち上がる</button>
+      <p class="tiny-note start-note">中央の応援ラインでタップだ！</p>
+      <button id="startButton" class="primary-button">ブッ立つ</button>
       <button id="resetButton" class="sub-button">最初から遊ぶ</button>
-      <p class="tiny-note">バーが中央の応援ラインに重なった瞬間にタップ！</p>
     </section>
 
     <section id="gameScreen" class="screen game-screen">
-      <header class="game-header">
-        <div>
-          <span class="label">TIME</span>
-          <strong id="timeText">15.0</strong>
-        </div>
-        <div>
-          <span class="label">POINT</span>
-          <strong id="scoreText">0</strong>
-        </div>
-      </header>
-
-      <div class="progress-wrap" aria-label="立ち上がりポイント">
-        <div id="progressBar" class="progress-bar"></div>
-      </div>
-
       <canvas id="gameCanvas" class="pixel-canvas stage-canvas" width="160" height="120" aria-label="立ち上がろうとする風太のドット絵"></canvas>
+
+      <p class="tiny-note game-note">中央の応援ラインでタップだ！</p>
 
       <div class="meter" aria-label="タイミングゲージ">
         <div class="meter-track">
@@ -53,6 +40,22 @@
         <p class="meter-caption">中央の<span>応援ライン</span>でタップ</p>
       </div>
 
+      <div class="live-panel">
+        <header class="game-header">
+          <div>
+            <span class="label">TIME</span>
+            <strong id="timeText">10.0</strong>
+          </div>
+          <div>
+            <span class="label">POINT</span>
+            <strong id="scoreText">0</strong>
+          </div>
+        </header>
+        <div class="progress-wrap" aria-label="立ち上がりポイント">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+      </div>
+
       <button id="tapButton" class="tap-button">タップで応援</button>
       <div id="judgeText" class="judge-text">READY?</div>
       <p id="flavorText" class="flavor-text">風太「膝が、歴史……」</p>
@@ -62,8 +65,8 @@
       <div class="badge bad">失敗</div>
       <h2>立てなかった。</h2>
       <canvas id="failCanvas" class="pixel-canvas" width="160" height="120" aria-label="しょんぼりする風太のドット絵"></canvas>
-      <p id="failText" class="result-copy">でも、何かを得た気がする。</p>
-      <button id="itemButton" class="primary-button">落ちていたものを見る</button>
+      <p id="failText" class="result-copy">倒れた先にも、なぜかアイテムは落ちている。</p>
+      <button id="itemButton" class="primary-button">拾う。拾うしかない。</button>
       <button id="backTitleButton" class="sub-button hidden">タイトルへ</button>
     </section>
 
@@ -77,11 +80,14 @@
 
     <section id="clearScreen" class="screen clear-screen">
       <div class="badge good">CLEAR</div>
-      <h2>ブッ立った。</h2>
+      <h2>風太、<br>ついに立ちぬ。</h2>
       <canvas id="clearCanvas" class="pixel-canvas" width="160" height="120" aria-label="立ち上がった風太のドット絵"></canvas>
-      <p class="result-copy">新聞も、サプリも、応援も。<br>全部くだらない。でも、全部あったかい。</p>
-      <p class="ending-line">風太は今日も、少しだけ世界を立たせた。</p>
-      <button id="clearResetButton" class="primary-button">もう一度、立ちぬ</button>
+      <p class="result-copy">風太が最後に立ったのは2020年。<br>私たちは、日本中を盛り上げた風太が今も大好き。<br>7月5日、風太の誕生日をみんなでお祝いしよう。</p>
+      <div class="link-buttons">
+        <a class="link-button" href="https://x.com/ChibaZoo" target="_blank" rel="noopener">千葉市動物公園のXを見る</a>
+        <a class="link-button" href="https://meme-coin-futa.pages.dev" target="_blank" rel="noopener">$FUTA のファンサイトへ</a>
+      </div>
+      <button id="clearResetButton" class="primary-button">もう一度、ブッ立つ</button>
     </section>
   </main>
 
