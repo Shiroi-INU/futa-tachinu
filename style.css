@@ -343,110 +343,58 @@ h2 {
   }
 }
 
-/* 追加演出：くだらないが、最後だけ少し熱い */
-.item-screen .item-icon {
-  animation: item-pop .72s steps(2, end) infinite;
-}
-
-.clear-screen h2 {
-  font-size: clamp(42px, 14vw, 68px);
-  color: var(--gold);
-}
-
-.clear-screen .pixel-canvas {
-  animation: clear-shake .48s steps(2, end) 3;
-}
-
-@keyframes item-pop {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50% { transform: translateY(-6px) rotate(2deg); }
-}
-
-@keyframes clear-shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
-}
-
-/* 2026-06-14 UI調整 */
+/* 追加調整：スタート画面の主役を「ブッ立つ」に寄せる */
 h1 {
   white-space: nowrap;
-  font-size: clamp(38px, 12vw, 58px);
+  font-size: clamp(38px, 13vw, 64px);
   letter-spacing: -0.1em;
-  padding-right: .1em;
 }
 
-.start-note,
-.game-note {
+.status-card {
+  border: 0;
+  box-shadow: none;
+  background: rgba(255, 247, 232, .16);
+  color: #fff7e8;
+  text-align: left;
+  padding: 10px 14px;
+}
+
+.start-note {
   width: min(100%, 330px);
-  padding: 8px 10px;
-  border: 3px solid var(--ink);
-  background: var(--gold);
-  color: var(--ink);
-  box-shadow: 0 4px 0 var(--ink);
-  opacity: 1;
-  line-height: 1.35;
+  color: #fff7e8;
+  font-size: 13px;
+  line-height: 1.6;
+  font-weight: 900;
+  opacity: .95;
+  padding: 0 4px;
 }
 
-.game-screen.screen.is-active {
-  gap: 10px;
+#startButton {
+  min-height: 86px;
+  font-size: clamp(28px, 9vw, 40px);
+  letter-spacing: .02em;
+  box-shadow: 0 10px 0 var(--ink), 0 18px 30px var(--shadow);
 }
 
-.stage-canvas {
-  width: min(76vw, 290px);
-  margin-top: 0;
+#resetButton {
+  width: min(100%, 260px);
+  min-height: 42px;
+  font-size: 12px;
 }
 
-.game-note {
-  margin-top: -2px;
-}
-
-.live-panel {
-  width: min(100%, 360px);
-  display: grid;
-  gap: 8px;
-}
-
-.game-header {
-  width: 100%;
-  gap: 8px;
-}
-
-.game-header > div {
-  padding: 8px 10px;
-}
-
-.game-header strong {
-  font-size: 26px;
-}
-
-.progress-wrap {
-  width: 100%;
-  height: 20px;
-}
-
-.meter {
-  padding: 10px;
-}
-
-.meter-track {
-  height: 54px;
-}
-
-.meter-caption {
-  display: none;
-}
-
-.tap-button {
-  margin-top: 2px;
-}
-
-.primary-button.is-disabled,
-.primary-button:disabled {
-  opacity: .48;
-  filter: grayscale(.35);
+button:disabled {
+  opacity: .55;
   transform: none !important;
   box-shadow: 0 7px 0 var(--ink) !important;
+  cursor: wait;
+}
+
+#itemButton:disabled::after {
+  content: "  ・・・";
+}
+
+.result-copy {
+  white-space: pre-line;
 }
 
 .link-buttons {
@@ -464,9 +412,10 @@ h1 {
   background: var(--panel);
   color: var(--ink);
   box-shadow: 0 6px 0 var(--ink);
-  font-size: 13px;
-  font-weight: 900;
   text-decoration: none;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.35;
 }
 
 .link-button:active {
@@ -474,32 +423,44 @@ h1 {
   box-shadow: 0 2px 0 var(--ink);
 }
 
-@media (max-width: 360px) {
-  h1 {
-    font-size: 34px;
-  }
-
-  .lead,
-  .result-copy {
-    font-size: 13px;
+@media (max-height: 720px) {
+  #startButton {
+    min-height: 72px;
+    font-size: clamp(24px, 8vw, 34px);
   }
 }
 
-@media (max-height: 700px) {
-  .stage-canvas {
-    width: min(62vw, 230px);
-  }
+/* 失敗画面の再挑戦ボタンだけ、改行されないよう少し小さくする */
+#failScreen .primary-button {
+  font-size: 12px;
+  letter-spacing: -0.04em;
+}
 
-  .game-screen.screen.is-active {
-    gap: 8px;
-  }
+/* ゲーム中：ゲージ・スコアを応援ボタン付近に集約 */
+.game-screen.screen.is-active {
+  gap: 10px;
+}
 
-  .tap-button {
-    min-height: 58px;
-  }
+.game-screen .stage-canvas {
+  width: min(72vw, 270px);
+}
 
-  .judge-text {
-    font-size: 20px;
-    min-height: 24px;
-  }
+.game-screen .game-header {
+  gap: 8px;
+}
+
+.game-screen .game-header > div {
+  padding: 7px 10px;
+}
+
+.game-screen .game-header strong {
+  font-size: 24px;
+}
+
+.game-screen .progress-wrap {
+  height: 18px;
+}
+
+.game-screen .tap-button {
+  margin-top: 2px;
 }

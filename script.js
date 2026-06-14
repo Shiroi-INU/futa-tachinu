@@ -2,8 +2,8 @@
   'use strict';
 
   const GAME_SECONDS = 10;
-  const STORAGE_KEY = 'futa_tachinu_state_v2';
   const CLEAR_POINT = 150;
+  const STORAGE_KEY = 'futa_tachinu_state_v1';
 
   const items = [
     {
@@ -14,7 +14,7 @@
     },
     {
       name: '子供の手紙',
-      icon: '✉️',
+      icon: '💌',
       copy: '昔、動物園に来た子供が飼育員に渡した手紙だ。読めないが、愛は伝わる。',
       itemLabel: '子供の手紙'
     },
@@ -29,42 +29,46 @@
   const configs = [
     {
       attempt: 1,
-      perfect: 7,
-      good: 3,
+      perfect: 8,
+      good: 4,
       miss: 0,
+      cap: 999,
       perfectWindow: 14,
       goodWindow: 46,
-      speed: 1.18,
+      speed: 1.16,
       flavor: '風太「初回で立てるほど、老いは甘くない」'
     },
     {
       attempt: 2,
-      perfect: 10,
-      good: 6,
+      perfect: 12,
+      good: 7,
       miss: 0,
+      cap: 999,
       perfectWindow: 14,
       goodWindow: 46,
-      speed: 1.18,
-      flavor: '新聞記事が効いている。主にプライドに。'
+      speed: 1.16,
+      flavor: '新聞記事が効いている。主にメンタルに。'
     },
     {
       attempt: 3,
-      perfect: 12,
+      perfect: 14,
       good: 8,
-      miss: 1,
+      miss: 0,
+      cap: 999,
       perfectWindow: 14,
       goodWindow: 46,
-      speed: 1.18,
+      speed: 1.16,
       flavor: '子供の手紙が効いている。文字は読めないが、愛は読める。'
     },
     {
       attempt: 4,
-      perfect: 28,
-      good: 20,
-      miss: 5,
+      perfect: 30,
+      good: 18,
+      miss: 3,
+      cap: 999,
       perfectWindow: 14,
       goodWindow: 46,
-      speed: 1.18,
+      speed: 1.16,
       flavor: 'みんなの応援で、応援ラインがほぼ人生。'
     }
   ];
@@ -108,10 +112,11 @@
   let barX = 0;
   let lastTapAt = 0;
   let tapCount = 0;
-  let lastScorePass = -1;
   let currentConfig = configs[0];
   let awardedItem = null;
   let gameRunning = false;
+  let tapEnabled = false;
+  let readyTimer = 0;
 
   function loadState() {
     try {
@@ -149,20 +154,22 @@
   function updateTitle() {
     const attempt = getAttempt();
     els.attemptLabel.textContent = `挑戦：${attempt}回目`;
-    els.startButton.textContent = attempt === 1 ? 'ブッ立つ' : attempt === 4 ? '絶対に立てる' : '今度こそブッ立つ';
     els.itemLabel.textContent = state.items.length
       ? `持ち物：${state.items.map((idx) => items[idx].itemLabel).join(' / ')}`
       : '持ち物：なし';
+    els.startButton.textContent = attempt >= 4 ? '絶対に立てる' : attempt >= 2 ? '今度こそブッ立つ' : 'ブッ立つ';
     drawFuta(els.titleCanvas, attempt >= 4 ? 70 : 30, 'title');
   }
 
   function resetGame() {
     cancelAnimationFrame(rafId);
+    clearTimeout(readyTimer);
     state = { items: [], cleared: false };
     saveState();
     score = 0;
     tapCount = 0;
     gameRunning = false;
+    tapEnabled = false;
     updateTitle();
     showScreen(els.titleScreen);
   }
@@ -171,21 +178,34 @@
     currentConfig = getConfig();
     score = 0;
     tapCount = 0;
-    lastScorePass = -1;
     lastTapAt = 0;
     awardedItem = null;
-    startedAt = performance.now();
-    gameRunning = true;
+    gameRunning = false;
+    tapEnabled = false;
+    clearTimeout(readyTimer);
 
     els.timeText.textContent = GAME_SECONDS.toFixed(1);
     els.scoreText.textContent = '0';
     els.progressBar.style.width = '0%';
-    els.judgeText.textContent = 'READY?';
-    els.flavorText.textContent = currentConfig.flavor;
+    els.judgeText.textContent = 'Ready…';
+    els.flavorText.textContent = '姿勢を正す。心はもう立っている。';
+    els.tapButton.disabled = true;
+    els.tapButton.textContent = 'Ready...';
 
     updateMeterZones(currentConfig);
     showScreen(els.gameScreen);
-    rafId = requestAnimationFrame(tick);
+    drawFuta(els.gameCanvas, 0, 'game');
+
+    readyTimer = window.setTimeout(() => {
+      els.judgeText.textContent = 'Go!';
+      els.flavorText.textContent = currentConfig.flavor;
+      els.tapButton.disabled = false;
+      els.tapButton.textContent = 'タップで応援';
+      startedAt = performance.now();
+      gameRunning = true;
+      tapEnabled = true;
+      rafId = requestAnimationFrame(tick);
+    }, 700);
   }
 
   function updateMeterZones(config) {
@@ -221,7 +241,7 @@
   }
 
   function handleTap(event) {
-    if (!gameRunning) return;
+    if (!gameRunning || !tapEnabled) return;
     event.preventDefault();
 
     const now = performance.now();
@@ -235,15 +255,6 @@
     const barCenter = barX + barWidth / 2;
     const target = trackWidth / 2;
     const diff = Math.abs(barCenter - target);
-    const elapsed = (now - startedAt) / 1000;
-    const passId = Math.floor(elapsed * currentConfig.speed * 2);
-
-    // バーが中央付近にいる間の連打で、同じ通過を何度も得点化しない。
-    if (passId === lastScorePass && diff <= currentConfig.goodWindow) {
-      els.judgeText.textContent = 'WAIT';
-      els.flavorText.textContent = '風太「同じ応援は、一回で十分じゃ」';
-      return;
-    }
 
     let judge = 'MISS';
     let add = currentConfig.miss;
@@ -256,23 +267,19 @@
       add = currentConfig.good;
     }
 
-    if (diff <= currentConfig.goodWindow) {
-      lastScorePass = passId;
-    }
-
     addScore(add, judge);
   }
 
   function addScore(add, judge) {
-    score += add;
+    score = Math.min(currentConfig.cap, score + add);
     els.scoreText.textContent = String(score);
     els.progressBar.style.width = `${Math.min(100, (score / CLEAR_POINT) * 100)}%`;
     els.judgeText.textContent = `${judge} +${add}`;
 
     if (judge === 'PERFECT') {
-      els.flavorText.textContent = 'いま、膝が伝説に近づいた。';
+      els.flavorText.textContent = '完璧と言える。';
     } else if (judge === 'GOOD') {
-      els.flavorText.textContent = 'いいぞ風太。若干、縦だ。';
+      els.flavorText.textContent = 'いい感じだ。';
     } else {
       els.flavorText.textContent = currentConfig.miss > 0 ? 'ズレた。でも応援は届いた。' : '虚空をタップした。';
     }
@@ -285,9 +292,20 @@
   function endGame(forceClear = false) {
     if (!gameRunning) return;
     gameRunning = false;
+    tapEnabled = false;
+    els.tapButton.disabled = true;
     cancelAnimationFrame(rafId);
 
     const attempt = getAttempt();
+
+    // 4回目は「普通にタップしていれば必ずクリア」のため、
+    // 5タップ以上していたら最後に“みんなの応援”が不足分を押し上げる。
+    if (!forceClear && attempt >= 4 && tapCount >= 5 && score < CLEAR_POINT) {
+      score = CLEAR_POINT;
+      els.scoreText.textContent = String(CLEAR_POINT);
+      els.progressBar.style.width = '100%';
+      forceClear = true;
+    }
 
     if (forceClear || score >= CLEAR_POINT) {
       state.cleared = true;
@@ -307,19 +325,17 @@
       els.backTitleButton.classList.remove('hidden');
     } else {
       const lines = [
-        '風太は立てなかった。だが、足元に黄ばんだ伝説が落ちていた。',
-        '風太は立てなかった。だが、古い引き出しから、しわしわの手紙が出てきた。',
-        'やはり、風太は立てなかった。あきらめかけたその時、周りが騒がしいことに気づいた。'
+        '風太は立てなかった。\nだが、落とした視線の先に何かが落ちている。',
+        '風太は立てなかった。\nだが、引き出しからしわしわの手紙が出てきた。',
+        'やはり、風太は立てなかった。\nあきらめかけたその時、周りが騒がしいことに気づいた。'
       ];
       els.failText.textContent = lines[awardedItem];
       els.itemButton.textContent = awardedItem === 2 ? '周りを見てみる' : '拾う。拾うしかない。';
       els.itemButton.disabled = true;
-      els.itemButton.classList.add('is-disabled');
       els.itemButton.classList.remove('hidden');
       els.backTitleButton.classList.add('hidden');
-      setTimeout(() => {
-        els.itemButton.disabled = false;
-        els.itemButton.classList.remove('is-disabled');
+      window.setTimeout(() => {
+        if (els.failScreen.classList.contains('is-active')) els.itemButton.disabled = false;
       }, 1500);
     }
 
@@ -364,21 +380,18 @@
     rect(ctx, 0, 88, w, 32, '#67b95b');
     rect(ctx, 0, 100, w, 20, '#3e8639');
 
-    // うっすら観客。4回目はやたら多い。
-    const audienceCount = getAttempt() >= 4 || mode === 'clear' ? 13 : 9;
-    for (let i = 0; i < audienceCount; i += 1) {
-      const x = 5 + i * 12;
+    // うっすら観客
+    for (let i = 0; i < 9; i += 1) {
+      const x = 9 + i * 17;
       rect(ctx, x, 76 + (i % 2) * 2, 6, 7, '#fff3d7');
       rect(ctx, x + 1, 72 + (i % 3), 4, 4, '#2a1712');
     }
 
     if (mode === 'clear') {
       drawSparkles(ctx, time);
-      pixelText(ctx, 'FUTA! FUTA!', 45, 28, '#2a1712');
     }
 
-    const wobble = mode === 'game' ? Math.round(Math.sin(time / 90) * (1 + p * 4)) : 0;
-    const bodyX = 76 + wobble;
+    const bodyX = 76;
     const groundY = 90;
     const stand = mode === 'clear' ? 1 : p;
     const crouch = 1 - stand;
@@ -425,13 +438,6 @@
     rect(ctx, bodyX + 3, headY + 18, 7, 5, '#2a1712');
     rect(ctx, bodyX + 1, headY + 24, 11, 3, '#fff3d7');
 
-    // バカっぽさ：必死のハチマキ、汗、謎のほっぺ
-    rect(ctx, bodyX - 17, headY + 3, 45, 3, '#fff3d7');
-    rect(ctx, bodyX + 29, headY + 3, 5, 3, '#fff3d7');
-    rect(ctx, bodyX - 20, headY + 31, 4, 4, '#ffd15c');
-    rect(ctx, bodyX + 28, headY + 29, 3, 6, '#3f7fc4');
-    rect(ctx, bodyX + 28, headY + 36, 3, 3, '#3f7fc4');
-
     if (mode === 'fail') {
       rect(ctx, bodyX + 26, headY + 24, 3, 8, '#3f7fc4');
       rect(ctx, bodyX + 26, headY + 33, 3, 4, '#3f7fc4');
@@ -443,7 +449,7 @@
       rect(ctx, 121, 43, 8, 8, '#fff3d7');
       pixelText(ctx, 'TATTA!', 57, 12, '#fff3d7');
     } else if (mode === 'game') {
-      const words = point > 110 ? 'ASI KITA' : point > 60 ? 'YOI SHO' : 'FUTA?' ;
+      const words = point > 80 ? 'MO SUKOshi' : point > 40 ? 'YOI SHO' : 'FUTA';
       pixelText(ctx, words, 8, 10, '#fff3d7');
     } else {
       pixelText(ctx, 'FUTA', 11, 10, '#fff3d7');
