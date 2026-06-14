@@ -36,7 +36,7 @@
       perfectWindow: 14,
       goodWindow: 46,
       speed: 1.16,
-      flavor: 'いきなり立てるほど甘くないか…'
+      flavor: 'レッサーパンダの誇りにかけて！'
     },
     {
       attempt: 2,
@@ -58,7 +58,7 @@
       perfectWindow: 14,
       goodWindow: 46,
       speed: 1.16,
-      flavor: '子どもたちがくれた愛情を確かに覚えている。'
+      flavor: 'ありがとう、あの頃の子どもたち。'
     },
     {
       attempt: 4,
