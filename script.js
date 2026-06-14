@@ -9,19 +9,19 @@
     {
       name: '新聞記事',
       icon: '📰',
-      copy: '古い新聞記事には、風太が立ち上がったニュースが載っている。足腰に力がみなぎる気がする',
+      copy: '古い新聞記事には、風太が立ち上がったニュースが載っている。足腰に力がみなぎる気がする。',
       itemLabel: '新聞記事'
     },
     {
       name: '子どもの手紙',
       icon: '💌',
-      copy: '昔、動物園に来た子どもがくれた手紙だ。文字が読めなくても、当時はうれしかった',
+      copy: '昔、動物園に来た子どもがくれた手紙だ。文字が読めなくても、当時はうれしかった。',
       itemLabel: '子どもの手紙'
     },
     {
       name: 'みんなの応援',
       icon: '📣',
-      copy: '「風太ガンバレ！」――思いは届いた。次は立つ。必ず立てる',
+      copy: '「風太ガンバレ！」――思いは届いた。次は立つ、必ず立てる！',
       itemLabel: 'みんなの応援'
     }
   ];
@@ -69,7 +69,7 @@
       perfectWindow: 14,
       goodWindow: 46,
       speed: 1.16,
-      flavor: 'みんながいる。それがすべてだ。'
+      flavor: 'みんなの声が聞こえる。'
     }
   ];
 
@@ -188,7 +188,7 @@
     els.scoreText.textContent = '0';
     els.progressBar.style.width = '0%';
     els.judgeText.textContent = 'Ready…';
-    els.flavorText.textContent = '心はもう立っている。';
+    els.flavorText.textContent = 'さあ、立つぜ！';
     els.tapButton.disabled = true;
     els.tapButton.textContent = 'Ready...';
 
