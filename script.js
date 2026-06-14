@@ -29,8 +29,8 @@
   const configs = [
     {
       attempt: 1,
-      perfect: 8,
-      good: 4,
+      perfect: 6,
+      good: 3,
       miss: 0,
       cap: 999,
       perfectWindow: 14,
@@ -40,8 +40,8 @@
     },
     {
       attempt: 2,
-      perfect: 12,
-      good: 7,
+      perfect: 10,
+      good: 5,
       miss: 0,
       cap: 999,
       perfectWindow: 14,
@@ -51,8 +51,8 @@
     },
     {
       attempt: 3,
-      perfect: 14,
-      good: 8,
+      perfect: 12,
+      good: 6,
       miss: 0,
       cap: 999,
       perfectWindow: 14,
@@ -449,7 +449,7 @@
       rect(ctx, 121, 43, 8, 8, '#fff3d7');
       pixelText(ctx, 'TATTA!', 57, 12, '#fff3d7');
     } else if (mode === 'game') {
-      const words = point > 80 ? 'MO SUKOshi' : point > 40 ? 'YOI SHO' : 'FUTA';
+      const words = point > 80 ? 'MO SUKOSHI' : point > 40 ? 'YOI SHO' : 'FUTA';
       pixelText(ctx, words, 8, 10, '#fff3d7');
     } else {
       pixelText(ctx, 'FUTA', 11, 10, '#fff3d7');
