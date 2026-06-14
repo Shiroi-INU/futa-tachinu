@@ -13,9 +13,9 @@
       itemLabel: '新聞記事'
     },
     {
-      name: '子供の手紙',
+      name: '子どもの手紙',
       icon: '💌',
-      copy: '昔、動物園に来た子供が飼育員に渡した手紙だ。読めないが、愛は伝わる。',
+      copy: '昔、動物園に来た子どもが飼育員に渡した手紙だ。読めないが、愛は伝わる。',
       itemLabel: '子供の手紙'
     },
     {
@@ -36,7 +36,7 @@
       perfectWindow: 14,
       goodWindow: 46,
       speed: 1.16,
-      flavor: '風太「初回で立てるほど、老いは甘くない」'
+      flavor: 'いきなり立てるほど甘くないか…'
     },
     {
       attempt: 2,
@@ -47,7 +47,7 @@
       perfectWindow: 14,
       goodWindow: 46,
       speed: 1.16,
-      flavor: '新聞記事が効いている。主にメンタルに。'
+      flavor: '懐かしい思い出が力をくれる。'
     },
     {
       attempt: 3,
@@ -58,7 +58,7 @@
       perfectWindow: 14,
       goodWindow: 46,
       speed: 1.16,
-      flavor: '子供の手紙が効いている。文字は読めないが、愛は読める。'
+      flavor: '子どもたちがくれた愛情を確かに覚えている。'
     },
     {
       attempt: 4,
@@ -69,7 +69,7 @@
       perfectWindow: 14,
       goodWindow: 46,
       speed: 1.16,
-      flavor: 'みんなの応援で、応援ラインがほぼ人生。'
+      flavor: 'みんながいる。絶対に立てる。'
     }
   ];
 
@@ -157,7 +157,7 @@
     els.itemLabel.textContent = state.items.length
       ? `持ち物：${state.items.map((idx) => items[idx].itemLabel).join(' / ')}`
       : '持ち物：なし';
-    els.startButton.textContent = attempt >= 4 ? '絶対に立てる' : attempt >= 2 ? '今度こそブッ立つ' : 'ブッ立つ';
+    els.startButton.textContent = attempt >= 4 ? '絶対に立ちぬ' : attempt >= 2 ? '今度こそ立ちぬ' : 'ブッ立ちぬ';
     drawFuta(els.titleCanvas, attempt >= 4 ? 70 : 30, 'title');
   }
 
@@ -188,7 +188,7 @@
     els.scoreText.textContent = '0';
     els.progressBar.style.width = '0%';
     els.judgeText.textContent = 'Ready…';
-    els.flavorText.textContent = '姿勢を正す。心はもう立っている。';
+    els.flavorText.textContent = '心はもう立っている。';
     els.tapButton.disabled = true;
     els.tapButton.textContent = 'Ready...';
 
@@ -320,7 +320,7 @@
     drawFuta(els.failCanvas, score, 'fail');
 
     if (awardedItem === null) {
-      els.failText.textContent = '応援はある。あとはタップするだけ。たぶん。';
+      els.failText.textContent = '応援は十分。あとはタップするだけだ。';
       els.itemButton.classList.add('hidden');
       els.backTitleButton.classList.remove('hidden');
     } else {
@@ -330,7 +330,7 @@
         'やはり、風太は立てなかった。\nあきらめかけたその時、周りが騒がしいことに気づいた。'
       ];
       els.failText.textContent = lines[awardedItem];
-      els.itemButton.textContent = awardedItem === 2 ? '周りを見てみる' : '拾う。拾うしかない。';
+      els.itemButton.textContent = awardedItem === 2 ? '周りを見てみる' : '手を伸ばす';
       els.itemButton.disabled = true;
       els.itemButton.classList.remove('hidden');
       els.backTitleButton.classList.add('hidden');
