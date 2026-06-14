@@ -510,17 +510,19 @@
   showScreen(els.titleScreen);
 })();
 
-const shareXButton = document.getElementById("share-x-button");
+document.addEventListener("DOMContentLoaded", () => {
+  const shareXButton = document.getElementById("share-x-button");
 
-if (shareXButton) {
-  shareXButton.addEventListener("click", () => {
-    const text = `https://shiroi-inu.github.io/futa-tachinu/
+  if (shareXButton) {
+    shareXButton.addEventListener("click", () => {
+      const text = `https://shiroi-inu.github.io/futa-tachinu/
 10秒ミニゲーム「風太、立ちぬ」をクリア！
 
 あの立ちあがるレッサーパンダ、風太は7/5(日)で23歳！ 人間なら100歳以上だってさ。千葉市動物公園（@ChibaZoo）さん、これからも風太をよろしくね。`;
 
-    const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+      const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
 
-    window.open(shareUrl, "_blank", "noopener,noreferrer");
-  });
-}
+      window.open(shareUrl, "_blank", "noopener,noreferrer");
+    });
+  }
+});
