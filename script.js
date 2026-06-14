@@ -157,7 +157,7 @@
     els.itemLabel.textContent = state.items.length
       ? `持ち物：${state.items.map((idx) => items[idx].itemLabel).join(' / ')}`
       : '持ち物：なし';
-    els.startButton.textContent = attempt >= 4 ? '絶対に立ちぬ' : attempt >= 2 ? '今度こそ立ちぬ' : 'ブッ立ちぬ';
+    els.startButton.textContent = attempt >= 4 ? '絶対に立ちぬ' : attempt >= 2 ? '次こそ立ちぬ' : 'いざ立ちぬ';
     drawFuta(els.titleCanvas, attempt >= 4 ? 70 : 30, 'title');
   }
 
